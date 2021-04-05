@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:9000
+
+########################################################################
+### Common endpoints
+########################################################################
+
+### Get all tasks
+GET {{baseUrl}}/tasks HTTP/1.1
+content-type: application/json
+
+### Create task
+POST {{baseUrl}}/tasks HTTP/1.1
+content-type: application/json
+
+{
+    "label": "Delete this"
+}
+
+### Patch task
+PATCH {{baseUrl}}/tasks/6068a5e0ccc044469d1ada49 HTTP/1.1
+Content-Type: application/json
+
+{
+    "label": "Do that important thing",
+    "done": true,
+    "test": "hello"
+}
+
+### Delete task
+DELETE {{baseUrl}}/tasks/606b3fc885f254681fb56363 HTTP/1.1
+
+########################################################################
+### Other stuff
+########################################################################
+
+### JWT Example
+GET {{baseUrl}}/tasks HTTP/1.1
+content-type: application/json
+Authorization: jwt abcdefg123456
+
+{
+    "label": "test"
+}
+
+###
