@@ -1,41 +1,55 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import express from "express";
+import createError from "http-errors";
+import { fileURLToPath } from "url";
+import path, { dirname } from "path";
+import cors from "cors";
+import logger from "morgan";
+import mongoose from "mongoose";
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+import { tasksRouter } from "./components/tasks/tasks.routes";
+import { usersRouter } from "./components/users/users.routes";
 
-var app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+const app = express();
 
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
+app.use(express.static(path.join(__dirname, "public")));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// routes
+app.use("/tasks", tasksRouter);
+app.use("/users", usersRouter);
+
+// conntect to db
+const dev_db_url = "mongodb://localhost:27017/tasks-playground";
+
+mongoose.connect(process.env.MONGODB_URI || dev_db_url, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.once("open", () => console.log("Connected to the database"));
+db.on("error", () => console.error.bind(console, "MongoDB connection error:"));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send(err);
 });
 
-module.exports = app;
+export { app };
