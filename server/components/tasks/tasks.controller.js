@@ -1,26 +1,28 @@
 import TasksService from "./tasks.service";
+import { Codes } from "../../shared/utils";
 
 const TaskController = {};
 
-TaskController.getAll = async (req, res, next) => {
+TaskController.getAll = async (req, res) => {
   try {
     const tasks = await TasksService.getAll();
     return res.send(tasks);
   } catch (err) {
-    return res.status(400).send({ err });
+    return res.status(Codes.BAD_REQUEST).send({ err });
   }
 };
 
-TaskController.create = async (req, res, next) => {
+TaskController.create = async (req, res) => {
   try {
-    const newTask = await TasksService.create(req.body);
+    const taskToCreate = req.body;
+    const newTask = await TasksService.create(taskToCreate);
     return res.send(newTask);
   } catch (err) {
-    return res.status(400).send({ err });
+    return res.status(Codes.BAD_REQUEST).send({ err });
   }
 };
 
-TaskController.patch = async (req, res, next) => {
+TaskController.patch = async (req, res) => {
   try {
     const id = req.params.id;
     const task = req.body;
@@ -30,24 +32,24 @@ TaskController.patch = async (req, res, next) => {
       return res.send(updatedTask);
     } else {
       //TODO: handle error properly
-      return res.sendStatus(400);
+      return res.sendStatus(Codes.BAD_REQUEST);
     }
   } catch (err) {
-    return res.status(400).send({ err });
+    return res.status(Codes.BAD_REQUEST).send({ err });
   }
 };
 
-TaskController.delete = async (req, res, next) => {
+TaskController.delete = async (req, res) => {
   try {
     const deletedTask = await TasksService.deleteById(req.params.id);
     if (deletedTask) {
       return res.send(deletedTask);
     } else {
       //TODO: handle error properly
-      return res.sendStatus(400);
+      return res.sendStatus(Codes.BAD_REQUEST);
     }
   } catch (err) {
-    return res.status(400).send({ err });
+    return res.status(Codes.BAD_REQUEST).send({ err });
   }
 };
 
