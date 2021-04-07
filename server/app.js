@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import cors from "cors";
 import logger from "morgan";
-import { tasksRouter, usersRouter } from "./components/routes";
+import { authRouter, usersRouter, tasksRouter } from "./components/routes";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,8 +18,9 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
 // routes
-app.use("/tasks", tasksRouter);
+app.use("/auth", authRouter);
 app.use("/users", usersRouter);
+app.use("/tasks", tasksRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
