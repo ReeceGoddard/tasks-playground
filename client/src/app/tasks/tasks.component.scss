@@ -1,0 +1,30 @@
+$gap: 1px;
+
+:host {
+  display: block;
+  background: #e5e5e5;
+  padding: 1px 0;
+  max-width: 600px;
+  margin: auto;
+  margin-top: 40px;
+
+  .form-new-task {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    margin-top: $gap;
+    height: 60px;
+
+    input {
+      border: 0;
+      padding: 0 20px;
+      font-size: 18px;
+      flex: 1;
+      align-self: stretch;
+    }
+  }
+}
+
+app-task + app-task {
+  margin-top: $gap;
+}

@@ -1,0 +1,7 @@
+<app-task *ngFor="let task of tasks" [task]="task" (done)="setTaskComplete(task._id || '', $event)"
+  (delete)="deleteTask(task._id || '')">
+</app-task>
+<form class="form-new-task" [formGroup]="newTaskForm" (ngSubmit)="onSubmit()">
+  <input type="text" class="form-control" formControlName="labelControl" placeholder="New task..." />
+  <button type="submit">Save</button>
+</form>
